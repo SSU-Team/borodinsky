@@ -16,10 +16,14 @@ const htmlmin = require("gulp-htmlmin");
 const posthtml = require("gulp-posthtml");
 const include = require("posthtml-include");
 
+const svgstore = require("gulp-svgstore");
+
 const imagemin = require("gulp-imagemin");
+const webp = require("gulp-webp");
+
 
 const clean = () => {
-    return del("./build/**/*.*");
+    return del("./build");
 }
 
 const scss = () => {
@@ -36,6 +40,8 @@ const scss = () => {
         .pipe(gulp.dest("./build/css"))
         .pipe(browserSync.stream());
 }
+const scssAddEventListener = () => gulp.watch("./source/scss/*.scss", scss);
+
 
 const html = () => {
     return gulp.src("./source/*.html")
@@ -43,29 +49,48 @@ const html = () => {
         .pipe(htmlmin({ collapseWhitespace: true }))
         .pipe(gulp.dest("./build"));
 }
+const htmlAddEventListener = () => gulp.watch(
+    "./source/*.html").on('change', 
+    gulp.series(html, browserSync.reload)
+);
 
-const images = () => {
-    return gulp.src([
-        "./source/images/**/*.*",
-        "!source/images/icons",
-        "!source/images/sprite.svg"
-      ], {
-        base: "./source/img"
-      })
-        .pipe(changed("./build/images"))
-        .pipe(imagemin([
-            imagemin.mozjpeg({quality: 95, progressive: true}),
-            imagemin.optipng({optimizationLevel: 5}),
-          ]))
-        .pipe(gulp.dest("./build"));
-}
 
 const sprite = () => {
     return gulp.src("./source/images/icons/icon-*.svg")
         .pipe(svgstore())
-        .pipe(gulp.rename("sprite.svg"))
-        .pipe(gulp.dest("./source/images"));
+        .pipe(rename("sprite.svg"))
+        .pipe(gulp.dest("./build/images"));
 }
+const spriteAddEventListener = () => gulp.watch(
+    "./source/images/icons/icon-*.svg", 
+    gulp.series(sprite, html, browserSync.reload)
+);
+
+
+const images = () => {
+    return gulp.src([
+        "./source/images/**/*.{jpg,jpeg,png,gif}",
+        "!source/images/icons",
+        "!source/images/sprite.svg",
+      ], {
+        base: "./source/images"
+      })
+        .pipe(changed("./build/images"))
+        
+        .pipe(imagemin([
+            imagemin.mozjpeg({quality: 100, progressive: true}),
+            imagemin.optipng({optimizationLevel: 1}),
+          ]))
+        .pipe(gulp.dest("./build/images"))
+        
+        .pipe(webp())
+        .pipe(gulp.dest("./build/images"));
+}
+const imagesAddEventListener = () => gulp.watch(
+    "./source/images/**/*.{jpg,jpeg,png,svg}", 
+    gulp.series(images)
+);
+
 
 const sync = () => {
     browserSync.init({
@@ -75,12 +100,42 @@ const sync = () => {
         }
     });
 
-    gulp.watch("./source/images/icons/icon-*.svg", gulp.series(sprite, html, browserSync.reload));
-    gulp.watch("./source/images/**.*.{jpg,jpeg,png,svg}", gulp.series(images));
-    gulp.watch("./source/scss/*.scss", scss);
-    gulp.watch("./source/*.html").on('change', gulp.series(html, browserSync.reload));
+    imagesAddEventListener();
+    scssAddEventListener();
+    spriteAddEventListener();
+    htmlAddEventListener();
 }
 
 exports.clean = gulp.series(clean);
-exports.build = gulp.series(clean, scss, html);
+exports.images = gulp.series(images);
+exports.sprite = gulp.series(sprite);
+exports.build = gulp.series(clean, gulp.parallel(images, sprite, scss), html);
 exports.default = gulp.series(sync);
+
+
+
+
+
+
+
+
+
+
+//
+
+// const images = () => {
+//     return gulp.src([
+//         "./source/images/**/*.{jpg,jpeg,png,gif}",
+//         "!source/_compressed",
+//         "!source/images/icons",
+//         "!source/images/sprite.svg",
+//       ], {
+//         base: "./source/images"
+//       })
+//         .pipe(changed("./source/images/_compressed"))
+//         .pipe(imagemin([
+//             imagemin.mozjpeg({quality: 100, progressive: true}),
+//             imagemin.optipng({optimizationLevel: 1}),
+//           ]))
+//         .pipe(gulp.dest("./source/images/_compressed"));
+// }
