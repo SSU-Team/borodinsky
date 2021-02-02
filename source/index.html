@@ -1,14 +1,50 @@
 <!DOCTYPE html>
-<html lang="en"> 
+<html lang="en" class="page"> 
+
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="./css/main.min.css">
-    <title>Document</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="./css/main.min.css">
+  <title>Barbershop Borodinsky</title>
 </head>
-<body>  
-    <!-- <include src="./source/module.html"></include> -->
-    <h1>sdfsdfsdf</h1>
-    <p>World sldfjlsadfjsl;fjs;ld safd lfj;sa d</p>
+
+<body class="page__body">  
+  
+  <div class="visually-hidden"><include src="./source/images/sprite.svg"></include></div>
+ 
+  <h1 class="visually-hidden">Barbershop Borodinsky — book your haircut in out barbershop and buy products online</h1>
+
+  <header class="page-header">
+    <nav class="page-nav">
+      <ul class="page-nav__list  page-nav__site-list">
+        <li class="page-nav__item  page-nav__site-item">
+          <a class="page-nav__link  page-nav__site-link" href="">Information</a>
+        </li>
+        <li class="page-nav__item  page-nav__site-item">
+          <a class="page-nav__link  page-nav__site-link" href="">News</a>
+        </li>
+        <li class="page-nav__item  page-nav__site-item">
+          <a class="page-nav__link  page-nav__site-link" href="">Pricelist</a>
+        </li>
+        <li class="page-nav__item  page-nav__site-item">
+          <a class="page-nav__link  page-nav__site-link" href="">Shop</a>
+        </li>
+        <li class="page-nav__item  page-nav__site-item">
+          <a class="page-nav__link  page-nav__site-link" href="">Contacts</a>
+        </li>
+      </ul>
+      <ul class="page-nav__list  page-nav__user-list">
+        <li class="page-nav__item  page-nav__site-item">
+          <a class="page-nav__link  page-nav__user-link  page-nav__user-link--login" href="">
+            <svg class="page-nav__icon">
+              <use xlink:href="#icon-user-login"></use>
+            </svg> 
+            Login
+          </a>
+        </li>
+      </ul>
+    </nav>
+  </header>
+
 </body> 
 </html>

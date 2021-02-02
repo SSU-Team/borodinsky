@@ -1,5 +1,9 @@
-body {
-    background-color: red;
-    background-image: linear-gradient(red, yellow, blue);
-    color: red;
-}
+@import "./global/normalize.scss";
+
+@import "./global/variables.scss";
+@import "./global/mixins.scss";
+
+@import "./global/fonts.scss";
+
+@import "./block/page.scss";
+@import "./block/page-header.scss"; 
