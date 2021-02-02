@@ -16,11 +16,9 @@ const htmlmin = require("gulp-htmlmin");
 const posthtml = require("gulp-posthtml");
 const include = require("posthtml-include");
 
-const svgstore = require("gulp-svgstore");
-
 const imagemin = require("gulp-imagemin");
 const webp = require("gulp-webp");
-
+const svgstore = require("gulp-svgstore");
 
 const clean = () => {
     return del("./build");
@@ -106,36 +104,12 @@ const sync = () => {
     htmlAddEventListener();
 }
 
+
 exports.clean = gulp.series(clean);
 exports.images = gulp.series(images);
 exports.sprite = gulp.series(sprite);
+exports.scss = gulp.series(scss);
+exports.html = gulp.series(html);
+
 exports.build = gulp.series(clean, gulp.parallel(images, sprite, scss), html);
 exports.default = gulp.series(sync);
-
-
-
-
-
-
-
-
-
-
-//
-
-// const images = () => {
-//     return gulp.src([
-//         "./source/images/**/*.{jpg,jpeg,png,gif}",
-//         "!source/_compressed",
-//         "!source/images/icons",
-//         "!source/images/sprite.svg",
-//       ], {
-//         base: "./source/images"
-//       })
-//         .pipe(changed("./source/images/_compressed"))
-//         .pipe(imagemin([
-//             imagemin.mozjpeg({quality: 100, progressive: true}),
-//             imagemin.optipng({optimizationLevel: 1}),
-//           ]))
-//         .pipe(gulp.dest("./source/images/_compressed"));
-// }
