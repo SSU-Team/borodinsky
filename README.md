@@ -1,1 +1,2 @@
-# borodinsky
+# borodinsky static
+
